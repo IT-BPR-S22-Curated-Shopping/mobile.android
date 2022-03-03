@@ -1,5 +1,6 @@
 package com.example.ble_beacon;
 
+import android.bluetooth.le.AdvertiseSettings;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,13 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "BLE DEVICE";
+    private static final String PROFIL_1 = "Modern profile";
+    private static final String PROFIL_2 = "Classic profile";
+    private static final String PROFIL_3 = "Retro profile";
+    private static final String STOP_TRANSMITTING = "Stop Transmitting";
+    
+    private static final int TX_POWER = AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM;
+    private static final int MODE = AdvertiseSettings.ADVERTISE_MODE_LOW_POWER;
 
     public static String UUID_PROFILE1 = "010d2108-0462-4f97-bab8-000000000001";
     public static String UUID_PROFILE2 = "010d2108-0462-4f97-bab8-000000000002";
@@ -59,8 +67,11 @@ public class MainActivity extends AppCompatActivity {
         textViewIdentity = findViewById(R.id.textViewIdentity);
         textViewStatus = findViewById(R.id.textViewStatus);
         buttonProfil1 = findViewById(R.id.buttonTransmit);
+        buttonProfil1.setText(PROFIL_1);
         buttonProfil2 = findViewById(R.id.buttonTransmit2);
+        buttonProfil2.setText(PROFIL_2);
         buttonProfil3 = findViewById(R.id.buttonTransmit3);
+        buttonProfil3.setText(PROFIL_3);
 
         seekBarTx = findViewById(R.id.seekBarTx);
         seekBarTx.setMin(-100);
@@ -88,10 +99,10 @@ public class MainActivity extends AppCompatActivity {
         String imageUrl = "https://images.squarespace-cdn.com/content/v1/5f6a3b396b1bc12ab9192246/1612621587515-BP8Q50NXPW0A3FMY3PP7/animation+company.gif";
 
         Glide
-                .with(getApplicationContext())
-                .load(imageUrl)
-                .override(300, Target.SIZE_ORIGINAL)
-                .into(imageView);
+            .with(getApplicationContext())
+            .load(imageUrl)
+            .override(300, Target.SIZE_ORIGINAL)
+            .into(imageView);
 
 
         textViewUUID.setText("NOT SET");
@@ -111,17 +122,17 @@ public class MainActivity extends AppCompatActivity {
             seekBarTx.setEnabled(false);
             if (i == 1) {
                 selectedUUID = UUID_PROFILE1;
-                buttonProfil1.setText("Stop Transmitting");
+                buttonProfil1.setText(STOP_TRANSMITTING);
                 buttonProfil2.setVisibility(View.INVISIBLE);
                 buttonProfil3.setVisibility(View.INVISIBLE);
             } else if (i == 2) {
                 selectedUUID = UUID_PROFILE2;
-                buttonProfil2.setText("Stop Transmitting");
+                buttonProfil2.setText(STOP_TRANSMITTING);
                 buttonProfil1.setVisibility(View.INVISIBLE);
                 buttonProfil3.setVisibility(View.INVISIBLE);
             } else {
                 selectedUUID = UUID_PROFILE3;
-                buttonProfil3.setText("Stop Transmitting");
+                buttonProfil3.setText(STOP_TRANSMITTING);
                 buttonProfil2.setVisibility(View.INVISIBLE);
                 buttonProfil1.setVisibility(View.INVISIBLE);
             }
@@ -129,11 +140,11 @@ public class MainActivity extends AppCompatActivity {
             startAdvertising();
             imageView.setVisibility(View.VISIBLE);
         } else {
-            buttonProfil1.setText("Profil1");
+            buttonProfil1.setText(PROFIL_1);
             buttonProfil1.setVisibility(View.VISIBLE);
-            buttonProfil2.setText("Profil2");
+            buttonProfil2.setText(PROFIL_2);
             buttonProfil2.setVisibility(View.VISIBLE);
-            buttonProfil3.setText("Profil3");
+            buttonProfil3.setText(PROFIL_3);
             buttonProfil3.setVisibility(View.VISIBLE);
 
             stopAdvertising();
@@ -148,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void startAdvertising() {
 
-        String majorString = String.valueOf(new Random().nextInt(999 - 100) + 100);
-        String minorString = String.valueOf(new Random().nextInt(999 - 100) + 100);
+        String majorString = String.valueOf(1);
+        String minorString = String.valueOf(1);
         Beacon beacon = new Beacon.Builder()
                 .setId1(selectedUUID) // UUID
                 .setId2(majorString) // Major
@@ -166,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
         if (beaconParser != null) {
 
             beaconTransmitter = new BeaconTransmitter(getApplicationContext(), beaconParser);
+
+            beaconTransmitter.setAdvertiseMode(MODE);
+            beaconTransmitter.setAdvertiseTxPowerLevel(TX_POWER);
 
             textViewMajor.setText(majorString);
             textViewMinor.setText(minorString);
@@ -185,24 +199,5 @@ public class MainActivity extends AppCompatActivity {
         textViewStatus.setText("Not Transmitting");
     }
 
-
-//    protected void setAdvertiseData() {
-//        AdvertiseData.Builder mBuilder = new AdvertiseData.Builder();
-//        ByteBuffer mManufacturerData = ByteBuffer.allocate(24);
-//        byte[] uuid = asBytes(UUID.fromString("0CF052C297CA407C84F8B62AAC4E9020"));
-//        mManufacturerData.put(0, (byte)0xBE); // Beacon Identifier
-//        mManufacturerData.put(1, (byte)0xAC); // Beacon Identifier
-//        for (int i=2; i<=17; i++) {
-//            mManufacturerData.put(i, uuid[i-2]); // adding the UUID
-//        }
-//        mManufacturerData.put(18, (byte)0x00); // first byte of Major
-//        mManufacturerData.put(19, (byte)0x09); // second byte of Major
-//        mManufacturerData.put(20, (byte)0x00); // first minor
-//        mManufacturerData.put(21, (byte)0x06); // second minor
-//        mManufacturerData.put(22, (byte)0xB5); // txPower
-//        mBuilder.addManufacturerData(224, mManufacturerData.array()); // using google's company ID
-//        mBuilder.setIncludeDeviceName(true);
-//        mAdvertiseData = mBuilder.build();
-//    }
 
 }
