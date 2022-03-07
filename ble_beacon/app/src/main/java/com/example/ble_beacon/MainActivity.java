@@ -18,8 +18,6 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
 
 import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
 
 /*
     https://altbeacon.github.io/android-beacon-library/samples-java.html
@@ -28,13 +26,13 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "BLE DEVICE";
-    private static final String PROFIL_1 = "Modern profile";
-    private static final String PROFIL_2 = "Classic profile";
-    private static final String PROFIL_3 = "Retro profile";
+    private static final String PROFILE_1 = "Modern profile";
+    private static final String PROFILE_2 = "Classic profile";
+    private static final String PROFILE_3 = "Retro profile";
     private static final String STOP_TRANSMITTING = "Stop Transmitting";
-    
+
     private static final int TX_POWER = AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM;
-    private static final int MODE = AdvertiseSettings.ADVERTISE_MODE_LOW_POWER;
+    private static final int MODE = AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY;
 
     public static String UUID_PROFILE1 = "010d2108-0462-4f97-bab8-000000000001";
     public static String UUID_PROFILE2 = "010d2108-0462-4f97-bab8-000000000002";
@@ -67,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
         textViewIdentity = findViewById(R.id.textViewIdentity);
         textViewStatus = findViewById(R.id.textViewStatus);
         buttonProfil1 = findViewById(R.id.buttonTransmit);
-        buttonProfil1.setText(PROFIL_1);
+        buttonProfil1.setText(PROFILE_1);
         buttonProfil2 = findViewById(R.id.buttonTransmit2);
-        buttonProfil2.setText(PROFIL_2);
+        buttonProfil2.setText(PROFILE_2);
         buttonProfil3 = findViewById(R.id.buttonTransmit3);
-        buttonProfil3.setText(PROFIL_3);
+        buttonProfil3.setText(PROFILE_3);
 
         seekBarTx = findViewById(R.id.seekBarTx);
         seekBarTx.setMin(-100);
@@ -140,11 +138,11 @@ public class MainActivity extends AppCompatActivity {
             startAdvertising();
             imageView.setVisibility(View.VISIBLE);
         } else {
-            buttonProfil1.setText(PROFIL_1);
+            buttonProfil1.setText(PROFILE_1);
             buttonProfil1.setVisibility(View.VISIBLE);
-            buttonProfil2.setText(PROFIL_2);
+            buttonProfil2.setText(PROFILE_2);
             buttonProfil2.setVisibility(View.VISIBLE);
-            buttonProfil3.setText(PROFIL_3);
+            buttonProfil3.setText(PROFILE_3);
             buttonProfil3.setVisibility(View.VISIBLE);
 
             stopAdvertising();
