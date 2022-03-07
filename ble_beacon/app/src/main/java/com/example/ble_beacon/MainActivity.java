@@ -1,6 +1,11 @@
 package com.example.ble_beacon;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.le.AdvertiseSettings;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,21 +14,29 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 
 import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
+import org.altbeacon.beacon.Identifier;
+import org.altbeacon.beacon.MonitorNotifier;
+import org.altbeacon.beacon.Region;
 
 import java.util.Arrays;
 
 /*
     https://altbeacon.github.io/android-beacon-library/samples-java.html
+
+    Reference code can be found here:
+    https://altbeacon.github.io/android-beacon-library/beacon-transmitter.html
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MonitorNotifier {
 
     private static final String LOG_TAG = "BLE DEVICE";
     private static final String PROFILE_1 = "Modern profile";
@@ -97,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
         String imageUrl = "https://images.squarespace-cdn.com/content/v1/5f6a3b396b1bc12ab9192246/1612621587515-BP8Q50NXPW0A3FMY3PP7/animation+company.gif";
 
         Glide
-            .with(getApplicationContext())
-            .load(imageUrl)
-            .override(300, Target.SIZE_ORIGINAL)
-            .into(imageView);
+                .with(getApplicationContext())
+                .load(imageUrl)
+                .override(300, Target.SIZE_ORIGINAL)
+                .into(imageView);
 
 
         textViewUUID.setText("NOT SET");
@@ -112,8 +125,51 @@ public class MainActivity extends AppCompatActivity {
         buttonProfil2.setOnClickListener(v -> buttonClick(2));
         buttonProfil3.setOnClickListener(v -> buttonClick(3));
 
+
+//
+//        Intent intent = new Intent(this, AndroidProximityReferenceApplication.class);
+//        startActivity(intent);
+        enableForegroundService();
     }
 
+    private void enableForegroundService() {
+        BeaconManager beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
+
+        // The following code block sets up the foreground service
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "My Notification Channel ID");
+        builder.setSmallIcon(R.drawable.ic_launcher_background);
+        builder.setContentTitle("Broadcasting beacon");
+        Intent intent = new Intent(this, getClass());
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        builder.setContentIntent(pendingIntent);
+        NotificationChannel channel = new NotificationChannel("My Notification Channel ID",
+                "My Notification Name", NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("My Notification Channel Description");
+        NotificationManager notificationManager = (NotificationManager) getSystemService(
+                Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(channel);
+        builder.setChannelId(channel.getId());
+        beaconManager.enableForegroundServiceScanning(builder.build(), 456);
+        beaconManager.setEnableScheduledScanJobs(false);
+
+        // The following code block effectively disables beacon scanning in the foreground service
+        // to save battery.  Do not include this code block if you want to detect beacons
+
+        beaconManager.getBeaconParsers().clear(); // clearning all beacon parsers ensures nothing matches
+        beaconManager.setBackgroundBetweenScanPeriod(Long.MAX_VALUE);
+        beaconManager.setBackgroundScanPeriod(0);
+        beaconManager.setForegroundBetweenScanPeriod(Long.MAX_VALUE);
+        beaconManager.setForegroundScanPeriod(0);
+
+
+        // The following code block activates the foreground service by starting background scanning
+        Region region = new Region("dummy-region", Identifier.parse("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"), null, null);
+        beaconManager.startMonitoring(region);
+        beaconManager.addMonitorNotifier(this);
+    }
 
     public void buttonClick(int i) {
         if (!isTransmitting) {
@@ -198,4 +254,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void didEnterRegion(Region region) {
+        // not used
+    }
+
+    @Override
+    public void didExitRegion(Region region) {
+        // not used
+    }
+
+    @Override
+    public void didDetermineStateForRegion(int state, Region region) {
+        // not used
+    }
 }
