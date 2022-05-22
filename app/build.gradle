@@ -21,6 +21,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
+            res.srcDirs = ['src/main/res', 'src/main/res/drawable']
+        }
+    }
+
+    testOptions {
+        animationsDisabled = true
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -29,15 +45,66 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    testImplementation 'junit:junit:'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'org.altbeacon:android-beacon-library:2+'
 
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    /*Stack card swipe*/
+    implementation 'com.daprlabs.aaron:cardstack:0.3.1-beta0'
+
+
+    // recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+
+    //MVVM
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+
+    // font
+    implementation 'com.rhexgomez.typer:typer-roboto:2.0.0'
+
+    //
+    // unit testing
+    //
+
+    // junit
+    testImplementation(platform("org.junit:junit-bom:5.7.0"))
+
+    testImplementation("org.junit.jupiter:junit-jupiter") {
+        because 'allows to write and run Jupiter tests'
+    }
+
+    testImplementation("junit:junit:4.13.2")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine") {
+        because 'allows JUnit 3 and JUnit 4 tests to run'
+    }
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
+        because 'allows tests to run from IDEs that bundle older version of launcher'
+    }
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+
+    //JUnit Rules
+    androidTestImplementation 'androidx.test:rules:1.4.0'
+
+    //Espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    //Mockito
+    testImplementation 'org.mockito:mockito-core:2.19.0'
 }

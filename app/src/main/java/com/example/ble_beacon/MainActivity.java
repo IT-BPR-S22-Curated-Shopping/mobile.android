@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements MonitorNotifier {
     private TextView textViewSeekBar;
     private ImageView imageView;
 
+    private Button newProfileButton;
+
     BeaconTransmitter beaconTransmitter;
     private boolean isTransmitting = false;
 
@@ -83,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements MonitorNotifier {
         buttonProfil2.setText(PROFILE_2);
         buttonProfil3 = findViewById(R.id.buttonTransmit3);
         buttonProfil3.setText(PROFILE_3);
+
+        newProfileButton = findViewById(R.id.buttonNewProfile);
 
         seekBarTx = findViewById(R.id.seekBarTx);
         seekBarTx.setMin(-100);
@@ -129,7 +133,12 @@ public class MainActivity extends AppCompatActivity implements MonitorNotifier {
 //
 //        Intent intent = new Intent(this, AndroidProximityReferenceApplication.class);
 //        startActivity(intent);
-        enableForegroundService();
+//        enableForegroundService();
+    }
+
+    public void createNewProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     private void enableForegroundService() {
