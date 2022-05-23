@@ -1,6 +1,5 @@
 package mobile.android.prototype;
 
-import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,8 +19,6 @@ import androidx.core.app.NotificationCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 
-//import mobile.android.prototype.ui.profile.ProfileActivity;
-
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
@@ -31,6 +28,8 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.util.Arrays;
+
+import mobile.android.prototype.ui.profile.ProfileActivity;
 
 /*
     https://altbeacon.github.io/android-beacon-library/samples-java.html
@@ -67,13 +66,15 @@ public class BeaconActivity extends AppCompatActivity implements MonitorNotifier
     private TextView textViewSeekBar;
     private ImageView imageView;
 
+    private Button newProfileButton;
+
     BeaconTransmitter beaconTransmitter;
     private boolean isTransmitting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_beacon);
+        setContentView(R.layout.activity_main);
 
         textViewUUID = findViewById(R.id.textViewUUID);
         textViewMajor = findViewById(R.id.textViewMajor);
@@ -86,6 +87,8 @@ public class BeaconActivity extends AppCompatActivity implements MonitorNotifier
         buttonProfil2.setText(PROFILE_2);
         buttonProfil3 = findViewById(R.id.buttonTransmit3);
         buttonProfil3.setText(PROFILE_3);
+
+        newProfileButton = findViewById(R.id.buttonNewProfile);
 
         seekBarTx = findViewById(R.id.seekBarTx);
         seekBarTx.setMin(-100);
@@ -128,18 +131,27 @@ public class BeaconActivity extends AppCompatActivity implements MonitorNotifier
         buttonProfil2.setOnClickListener(v -> buttonClick(2));
         buttonProfil3.setOnClickListener(v -> buttonClick(3));
 
-        enableForegroundService();
+
+//
+//        Intent intent = new Intent(this, AndroidProximityReferenceApplication.class);
+//        startActivity(intent);
+//        enableForegroundService();
+    }
+
+    public void createNewProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     private void enableForegroundService() {
-        BeaconManager beaconManager = BeaconManager.getInstanceForApplication(getApplicationContext());
+        BeaconManager beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
 
         // The following code block sets up the foreground service
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "My Notification Channel ID");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "My Notification Channel ID");
         builder.setSmallIcon(R.drawable.ic_launcher_background);
         builder.setContentTitle("Broadcasting beacon");
-        Intent intent = new Intent(getApplicationContext(), getClass());
+        Intent intent = new Intent(this, getClass());
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
@@ -153,7 +165,6 @@ public class BeaconActivity extends AppCompatActivity implements MonitorNotifier
         builder.setChannelId(channel.getId());
         beaconManager.enableForegroundServiceScanning(builder.build(), 456);
         beaconManager.setEnableScheduledScanJobs(false);
-
 
         // The following code block effectively disables beacon scanning in the foreground service
         // to save battery.  Do not include this code block if you want to detect beacons
