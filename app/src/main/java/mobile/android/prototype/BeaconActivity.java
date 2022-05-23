@@ -74,7 +74,7 @@ public class BeaconActivity extends AppCompatActivity implements MonitorNotifier
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_beacon);
+        setContentView(R.layout.activity_main);
 
         textViewUUID = findViewById(R.id.textViewUUID);
         textViewMajor = findViewById(R.id.textViewMajor);
