@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="mobile.android.prototype.ui.profile.ProfileActivity">
+    tools:context=".ProfileActivity">
 
     <com.daprlabs.cardstack.SwipeFrameLayout
         xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
