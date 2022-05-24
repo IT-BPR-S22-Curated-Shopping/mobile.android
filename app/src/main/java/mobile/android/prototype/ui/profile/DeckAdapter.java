@@ -1,6 +1,7 @@
 package mobile.android.prototype.ui.profile;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +28,13 @@ public class DeckAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return data.size();
+        if (data != null)
+            return data.size();
+        return 0;
     }
 
     @Override
-    public Object getItem(int position) {
+    public CardItemModel getItem(int position) {
         return data.get(position);
     }
 
@@ -47,15 +50,27 @@ public class DeckAdapter extends BaseAdapter {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_profile_carditem, parent, false);
         }
         ((TextView) v.findViewById(R.id.product_name)).setText(data.get(position).getName());
-        ((TextView) v.findViewById(R.id.tags)).setText(data.get(position).getTags());
 
-        Glide
-                .with(context)
-                .load(data.get(position).getImageUrl())
-                .centerCrop()
-                .placeholder(R.drawable.loading_spinner)
-                .into((ImageView) v.findViewById(R.id.idIVCourse));
+        ((TextView) v.findViewById(R.id.tags)).setText(data.get(position).toTagString());
+
+        if (data.get(position).getImageUrl() != null) {
+            Glide
+                    .with(context)
+                    .load(data.get(position).getImageUrl())
+                    .centerCrop()
+                    .placeholder(R.drawable.loading_spinner)
+                    .into((ImageView) v.findViewById(R.id.idIVCourse));
+        }
+
 
         return v;
+    }
+
+    public void addItems(List<CardItemModel> cardItemModels) {
+        if (data == null) {
+            data = new ArrayList<>();
+        }
+        data.addAll(cardItemModels);
+        notifyDataSetInvalidated();
     }
 }

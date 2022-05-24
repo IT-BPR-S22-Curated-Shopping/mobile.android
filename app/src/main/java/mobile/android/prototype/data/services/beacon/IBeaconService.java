@@ -4,6 +4,4 @@ public interface IBeaconService {
 
     void enableTransmitting();
     void stopTransmitting();
-    void enableForegroundService();
-    void disableForegroundService();
 }

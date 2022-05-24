@@ -20,7 +20,6 @@ public class BeaconFragment extends Fragment {
 
     private TextView textView;
     private Button mainThreadButton;
-    private Button backgroundTransmitButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -33,11 +32,9 @@ public class BeaconFragment extends Fragment {
 
         textView = binding.textBeacon;
         mainThreadButton = binding.transmitButton;
-        backgroundTransmitButton = binding.backgroundButton;
 
         vm.getText().observe(getViewLifecycleOwner(), textView::setText);
         mainThreadButton.setOnClickListener(view -> vm.changeTransmittingStatus());
-        backgroundTransmitButton.setOnClickListener(view -> vm.changeTransmittingForegroundStatus());
 
 
         return root;

@@ -1,33 +1,63 @@
 package mobile.android.prototype.ui.profile;
 
+import android.app.Application;
+import android.content.Context;
+
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class ProfileViewModel extends ViewModel {
+import mobile.android.prototype.data.models.CustomerEntity;
+import mobile.android.prototype.data.models.ProductEntity;
+import mobile.android.prototype.data.models.TagEntity;
+import mobile.android.prototype.data.services.Repository;
+import mobile.android.prototype.data.services.api.ApiProvider;
+import mobile.android.prototype.data.services.api.ApiProviderImpl;
+import mobile.android.prototype.data.services.api.ServiceGenerator;
+import mobile.android.prototype.util.SystemUUID;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    private final LiveData<List<CardItemModel>> courseModalArrayList;
+public class ProfileViewModel extends AndroidViewModel {
 
+    private final MutableLiveData<List<CardItemModel>> list;
 
-    public ProfileViewModel() {
-        MutableLiveData<List<CardItemModel>> data = new MutableLiveData<>();
+    public ProfileViewModel(Application app) {
+        super(app);
+        list = new MutableLiveData<>();
 
-        List<CardItemModel> list = new ArrayList<>();
+        Repository.getInstance().getProfileProducts().observeForever(this::profileProductsChanged);
+        Repository.getInstance().requestProfileProducts();
+    }
 
-        list.add(new CardItemModel("Lamp1", null, "https://www.ikea.com/dk/da/images/products/ikea-ps-2014-loftlampe-hvid-kobberfarvet__0880877_pe613967_s5.jpg"));
-        list.add(new CardItemModel("Lamp2", null, "https://www.ikea.com/dk/da/images/products/tokabo-bordlampe-glas-gron__0879821_pe724779_s5.jpg"));
-        list.add(new CardItemModel("Lamp3", null, "https://www.ikea.com/dk/da/images/products/bunkeflo-loftlampe-hvid-birk__1008760_pe827315_s5.jpg"));
-        list.add(new CardItemModel("Lamp4", null, "https://www.ikea.com/dk/da/images/products/grindfallet-loftlampe-sort__1008889_pe827368_s5.jpg"));
-        list.add(new CardItemModel("Lamp5", null,"https://www.ikea.com/dk/da/images/products/arstid-bordlampe-messing-hvid__0880725_pe617347_s5.jpg"));
-
-        data.setValue(list);
-        courseModalArrayList = data;
+    private void profileProductsChanged(List<ProductEntity> productEntities) {
+        List<CardItemModel> cards = new ArrayList<>();
+        for (ProductEntity product : productEntities) {
+            if (product.getImage() != null && !product.getImage().isEmpty())
+                cards.add(new CardItemModel(product.getName(), product.getTags(), product.getImage()));
+        }
+        list.postValue(cards);
     }
 
     public LiveData<List<CardItemModel>> getList() {
-        return courseModalArrayList;
+        return list;
+    }
+
+    public void requestProfileProducts() {
+        Repository.getInstance().requestProfileProducts();
+    }
+
+    public void likeProduct(CardItemModel product) {
+        List<TagEntity> tags = product.getTags();
+        if (tags != null && tags.size() > 0)
+            Repository.getInstance().addTagsToCustomer(tags);
     }
 }

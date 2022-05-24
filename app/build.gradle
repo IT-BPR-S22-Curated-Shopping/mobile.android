@@ -70,7 +70,6 @@ dependencies {
     /*Stack card swipe*/
     implementation 'com.daprlabs.aaron:cardstack:0.3.1-beta0'
 
-
     // recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 

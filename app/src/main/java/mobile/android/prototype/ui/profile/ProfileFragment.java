@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,33 +15,52 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.daprlabs.cardstack.SwipeDeck;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import mobile.android.prototype.R;
+import mobile.android.prototype.data.models.ProductEntity;
+import mobile.android.prototype.data.services.api.ApiProvider;
 import mobile.android.prototype.databinding.FragmentProfileBinding;
 
 public class ProfileFragment extends Fragment {
 
+    private DeckAdapter adapter;
     private FragmentProfileBinding binding;
     private SwipeDeck cardStack;
+    private ProgressBar loadingBar;
+    private ProfileViewModel vm;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        ProfileViewModel vm =
+        vm =
                 new ViewModelProvider(this).get(ProfileViewModel.class);
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        cardStack = binding.swipeDeck;
+        vm.getList().observeForever(this::cardListChange);
+        loadingBar = binding.progressBarCyclic;
 
-        final DeckAdapter adapter = new DeckAdapter(vm.getList().getValue(), getContext());
-        cardStack.setAdapter(adapter);
-        cardStack.setEventCallback(swipeEventCallback());
+
+        {
+            cardStack = binding.swipeDeck;
+            adapter = new DeckAdapter(vm.getList().getValue(), getContext());
+            cardStack.setAdapter(adapter);
+            cardStack.setEventCallback(swipeEventCallback());
+            cardStack.setLeftImage(R.id.left_image);
+            cardStack.setRightImage(R.id.right_image);
+        }
+
 
         return root;
     }
 
+    private void cardListChange(List<CardItemModel> cardItemModels) {
+        adapter.addItems(cardItemModels);
+        loadingBar.setVisibility(View.GONE);
+    }
 
 
     @Override
@@ -54,31 +74,31 @@ public class ProfileFragment extends Fragment {
             @Override
             public void cardSwipedLeft(int position) {
                 // on card swipe left we are displaying a toast message.
-                Toast.makeText(getContext(), "Card Swiped Left", Toast.LENGTH_SHORT).show();
+                System.out.println("left");
             }
 
             @Override
             public void cardSwipedRight(int position) {
                 // on card swiped to right we are displaying a toast message.
-                Toast.makeText(getContext(), "Card Swiped Right", Toast.LENGTH_SHORT).show();
+                System.out.println("right");
+                CardItemModel product = adapter.getItem(position);
+                vm.likeProduct(product);
             }
 
             @Override
             public void cardsDepleted() {
                 // this method is called when no card is present
-                Toast.makeText(getContext(), "No more courses present", Toast.LENGTH_SHORT).show();
+                loadingBar.setVisibility(View.VISIBLE);
+                vm.requestProfileProducts();
+
             }
 
             @Override
             public void cardActionDown() {
-                // this method is called when card is swiped down.
-                Log.i("TAG", "CARDS MOVED DOWN");
             }
 
             @Override
             public void cardActionUp() {
-                // this method is called when card is moved up.
-                Log.i("TAG", "CARDS MOVED UP");
             }
         };
     }

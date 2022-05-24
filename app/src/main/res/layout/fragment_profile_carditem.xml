@@ -23,6 +23,24 @@
             android:layout_height="match_parent"
             android:background="@drawable/custom_gradient_bottom" />
 
+        <ImageView
+            android:id="@+id/right_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
+            android:src="@drawable/ic_baseline_thumb_up_128" />
+
+        <ImageView
+            android:id="@+id/left_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/ic_baseline_thumb_down_128" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

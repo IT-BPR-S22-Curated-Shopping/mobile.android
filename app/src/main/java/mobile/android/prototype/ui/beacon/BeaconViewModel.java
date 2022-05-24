@@ -16,10 +16,10 @@ public class BeaconViewModel extends AndroidViewModel {
     private final MutableLiveData<String> mText;
     private final Context context;
 
-    private IBeaconService beaconService;
+    private final IBeaconService beaconService;
 
     private boolean isTransmitting = false;
-    private boolean isForegroundServiceEnabled = false;
+
 
     public BeaconViewModel(Application app) {
         super(app);
@@ -27,17 +27,12 @@ public class BeaconViewModel extends AndroidViewModel {
         mText = new MutableLiveData<>();
 
         beaconService = new BeaconService(app, 0, 0);
-
         String android_id = SystemUUID.getDeviceUUID(app).toString();
         mText.setValue("Not transmitting\nId: "+ android_id);
     }
 
     public LiveData<String> getText() {
         return mText;
-    }
-
-    public void setmText(String string) {
-        mText.setValue(string);
     }
 
     public void changeTransmittingStatus() {
@@ -51,13 +46,5 @@ public class BeaconViewModel extends AndroidViewModel {
         isTransmitting = !isTransmitting;
     }
 
-    public void changeTransmittingForegroundStatus() {
-        if (!isForegroundServiceEnabled) {
-            beaconService.enableForegroundService();
-            isForegroundServiceEnabled = true;
-        } else {
-            beaconService.disableForegroundService();
-            isForegroundServiceEnabled = false;
-        }
-    }
+
 }

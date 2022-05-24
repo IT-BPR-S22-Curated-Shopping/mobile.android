@@ -10,7 +10,7 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Example of a BLE scanner prototype.\nThis prototype include example of profile creation.");
+        mText.setValue("Example of a BLE scanner prototype.");
     }
 
     public LiveData<String> getText() {

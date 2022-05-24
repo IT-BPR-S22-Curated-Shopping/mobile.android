@@ -1,13 +1,18 @@
 package mobile.android.prototype.ui.profile;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import mobile.android.prototype.data.models.TagEntity;
+
 public class CardItemModel {
 
     private String name;
-    private String tags;
+    private List<TagEntity> tags;
     private String imageUrl;
 
 
-    public CardItemModel(String name, String tags, String imageUrl) {
+    public CardItemModel(String name, List<TagEntity> tags, String imageUrl) {
         this.name = name;
         this.tags = tags;
         this.imageUrl = imageUrl;
@@ -21,11 +26,11 @@ public class CardItemModel {
         this.name = name;
     }
 
-    public String getTags() {
+    public List<TagEntity> getTags() {
         return tags;
     }
 
-    public void setTags(String tags) {
+    public void setTags(List<TagEntity> tags) {
         this.tags = tags;
     }
 
@@ -36,4 +41,13 @@ public class CardItemModel {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public String toTagString() {
+        List<String> tagArray = new ArrayList<>();
+        for(TagEntity tag : tags) {
+            tagArray.add(tag.getTag());
+        }
+        return String.join(", ", tagArray);
+    }
+
 }
