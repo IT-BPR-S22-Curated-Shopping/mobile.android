@@ -6,16 +6,16 @@ import com.google.gson.annotations.SerializedName;
 public class UuidEntity {
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("uuid")
     @Expose
     private String uuid;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

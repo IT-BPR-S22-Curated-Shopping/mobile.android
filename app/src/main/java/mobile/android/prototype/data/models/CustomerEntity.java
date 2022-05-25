@@ -14,7 +14,7 @@ public class CustomerEntity {
     private List<UuidEntity> uuids = null;
     @SerializedName("tags")
     @Expose
-    private List<Object> tags = null;
+    private List<TagEntity> tags = null;
 
     public Long getId() {
         return id;
@@ -32,11 +32,11 @@ public class CustomerEntity {
         this.uuids = uuids;
     }
 
-    public List<Object> getTags() {
+    public List<TagEntity> getTags() {
         return tags;
     }
 
-    public void setTags(List<Object> tags) {
+    public void setTags(List<TagEntity> tags) {
         this.tags = tags;
     }
 

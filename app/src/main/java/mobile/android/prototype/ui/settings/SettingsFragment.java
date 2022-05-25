@@ -15,11 +15,12 @@ import android.widget.TextView;
 
 import mobile.android.prototype.R;
 import mobile.android.prototype.databinding.FragmentHomeBinding;
+import mobile.android.prototype.databinding.FragmentSettingsBinding;
 import mobile.android.prototype.ui.home.HomeViewModel;
 
 public class SettingsFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
+    private FragmentSettingsBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -27,10 +28,10 @@ public class SettingsFragment extends Fragment {
         SettingsViewModel vm =
                 new ViewModelProvider(this).get(SettingsViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
+        final TextView textView = binding.textSetting;
         vm.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }

@@ -8,7 +8,7 @@ import java.util.List;
 public class ProductEntity {
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("number")
     @Expose
     private String number;
@@ -18,18 +18,15 @@ public class ProductEntity {
     @SerializedName("image")
     @Expose
     private String image;
-    @SerializedName("relatedProducts")
-    @Expose
-    private List<ProductEntity> relatedProducts = null;
     @SerializedName("tags")
     @Expose
     private List<TagEntity> tags = null;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -55,14 +52,6 @@ public class ProductEntity {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public List<ProductEntity> getRelatedProducts() {
-        return relatedProducts;
-    }
-
-    public void setRelatedProducts(List<ProductEntity> relatedProducts) {
-        this.relatedProducts = relatedProducts;
     }
 
     public List<TagEntity> getTags() {

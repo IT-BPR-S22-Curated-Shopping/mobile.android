@@ -12,6 +12,7 @@ import java.util.UUID;
 import mobile.android.prototype.data.models.CustomerEntity;
 import mobile.android.prototype.data.models.ProductEntity;
 import mobile.android.prototype.data.models.TagEntity;
+import mobile.android.prototype.data.services.api.ApiProvider;
 import mobile.android.prototype.data.services.api.ApiProviderImpl;
 import mobile.android.prototype.util.SystemUUID;
 import retrofit2.Call;
@@ -22,7 +23,7 @@ public class Repository {
 
 
     private static Repository INSTANCE;
-    private final ApiProviderImpl api;
+    private final ApiProvider api;
     private final MutableLiveData<List<ProductEntity>> profileProducts;
 
     private UUID deviceId;
