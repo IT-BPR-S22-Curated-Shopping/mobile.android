@@ -1,25 +1,26 @@
-package mobile.android.prototype.util;
+package mobile.android.prototype.ui.beacon;
 
-
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.provider.Settings;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import java.util.UUID;
+public class BeaconViewModelTest {
 
-
-public class SystemUUIDTest {
-
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
     @Mock
     private Context mMockContext;
     @Mock
@@ -46,17 +47,19 @@ public class SystemUUIDTest {
     }
 
     @Test
-    public void checkIfReturnsCorrectUUID() {
+    public void getTextReturnsDefault() {
         // arrange
         Context c = Mockito.mock(Context.class);
         Mockito.when(Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID)).thenReturn("aad8c2762f373551");
-        String expected = "010d2108-0462-4f97-aad8-c2762f373551";
+        BeaconViewModel vm = new BeaconViewModel(Mockito.mock(Application.class));
+        String expectedUUID = "010d2108-0462-4f97-aad8-c2762f373551";
+        String expectedString = "Not transmitting\nId: " + expectedUUID;
+
         // act
-        UUID uuid = SystemUUID.getDeviceUUID(c);
+        String actual = vm.getText().getValue();
 
         // assert
-        Assert.assertNotNull(uuid);
-        Assert.assertEquals(expected, uuid.toString());
+        Assert.assertEquals(expectedString, actual);
     }
 
 }

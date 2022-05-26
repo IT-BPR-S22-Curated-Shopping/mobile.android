@@ -95,4 +95,5 @@ dependencies {
 
     // mock
     testImplementation "org.mockito:mockito-inline:3.+"
+    testImplementation "android.arch.core:core-testing:1.1.1"
 }

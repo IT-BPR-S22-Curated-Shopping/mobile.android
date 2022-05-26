@@ -19,7 +19,6 @@ public class ApiProviderImpl implements ApiProvider {
 
     @Override
     public Call<CustomerEntity> addTagsToCustomer(Long id, List<TagEntity> tags) {
-        System.out.println("provider add tags to customer called");
         return ServiceGenerator.getApi().addTagsToCustomer(id, tags);
     }
 
