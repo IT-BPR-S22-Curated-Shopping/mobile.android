@@ -2,6 +2,7 @@ package mobile.android.prototype.data.services;
 
 import android.content.Context;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -29,8 +30,13 @@ public class Repository {
     private UUID deviceId;
     private CustomerEntity customerEntity;
 
-
-
+    @VisibleForTesting
+    public Repository(ApiProvider api, UUID uuid, CustomerEntity customerEntity) {
+        this.api = api;
+        this.deviceId = uuid;
+        this.customerEntity = customerEntity;
+        profileProducts = new MutableLiveData<>();
+    }
 
     private Repository() {
         api = new ApiProviderImpl();
@@ -50,7 +56,7 @@ public class Repository {
     }
 
 
-    private void requestCustomer() {
+    public void requestCustomer() {
         api.getCustomer(deviceId.toString()).enqueue(new Callback<CustomerEntity>() {
             @Override
             public void onResponse(Call<CustomerEntity> call, Response<CustomerEntity> response) {
@@ -67,7 +73,6 @@ public class Repository {
     }
 
     public void requestProfileProducts() {
-        System.out.println("Requesting products");
         api.getProfileProducts(customerEntity.getId(), 10).enqueue(new Callback<List<ProductEntity>>() {
             @Override
             public void onResponse(Call<List<ProductEntity>> call, Response<List<ProductEntity>> response) {
@@ -86,8 +91,6 @@ public class Repository {
 
 
     public void addTagsToCustomer(List<TagEntity> tags) {
-        System.out.println("adding tags to customer;" + customerEntity.getId() + ", " + Arrays.toString(tags.toArray()));
-
         api.addTagsToCustomer(customerEntity.getId(), tags).enqueue(new Callback<CustomerEntity>() {
             @Override
             public void onResponse(Call<CustomerEntity> call, Response<CustomerEntity> response) {
@@ -95,7 +98,6 @@ public class Repository {
                 if (customer != null) {
                     customerEntity = customer;
                 }
-                System.out.println(response.body());
             }
 
             @Override

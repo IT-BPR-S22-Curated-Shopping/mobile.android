@@ -19,7 +19,7 @@ import java.util.List;
 public class DeckAdapter extends BaseAdapter {
 
     private List<CardItemModel> data;
-    private Context context;
+    private final Context context;
 
     public DeckAdapter(List<CardItemModel> data, Context context) {
         this.data = data;

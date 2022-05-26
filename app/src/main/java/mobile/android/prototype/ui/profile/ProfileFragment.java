@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,9 +28,9 @@ public class ProfileFragment extends Fragment {
 
     private DeckAdapter adapter;
     private FragmentProfileBinding binding;
-    private SwipeDeck cardStack;
     private ProgressBar loadingBar;
     private ProfileViewModel vm;
+    private LinearLayout bottomLinearLayout;
 
 
     @Override
@@ -42,16 +44,17 @@ public class ProfileFragment extends Fragment {
 
         vm.getList().observeForever(this::cardListChange);
         loadingBar = binding.progressBarCyclic;
+        bottomLinearLayout = binding.profileBottomTextLayout;
+        TextView header = binding.profileHeaderText;
+        vm.getHeader().observe(getViewLifecycleOwner(), header::setText);
 
 
-        {
-            cardStack = binding.swipeDeck;
-            adapter = new DeckAdapter(vm.getList().getValue(), getContext());
-            cardStack.setAdapter(adapter);
-            cardStack.setEventCallback(swipeEventCallback());
-            cardStack.setLeftImage(R.id.left_image);
-            cardStack.setRightImage(R.id.right_image);
-        }
+        SwipeDeck cardStack = binding.swipeDeck;
+        adapter = new DeckAdapter(vm.getList().getValue(), getContext());
+        cardStack.setAdapter(adapter);
+        cardStack.setEventCallback(swipeEventCallback());
+        cardStack.setLeftImage(R.id.left_image);
+        cardStack.setRightImage(R.id.right_image);
 
 
         return root;
@@ -73,24 +76,18 @@ public class ProfileFragment extends Fragment {
         return new SwipeDeck.SwipeEventCallback() {
             @Override
             public void cardSwipedLeft(int position) {
-                // on card swipe left we are displaying a toast message.
-                System.out.println("left");
             }
 
             @Override
             public void cardSwipedRight(int position) {
-                // on card swiped to right we are displaying a toast message.
-                System.out.println("right");
                 CardItemModel product = adapter.getItem(position);
                 vm.likeProduct(product);
             }
 
             @Override
             public void cardsDepleted() {
-                // this method is called when no card is present
-                loadingBar.setVisibility(View.VISIBLE);
-                vm.requestProfileProducts();
-
+                vm.swipeDone();
+                bottomLinearLayout.setVisibility(View.GONE);
             }
 
             @Override

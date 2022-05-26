@@ -15,4 +15,5 @@
     <string name="swipe_products">Swipe products to get a better curated shopping experience.</string>
     <string name="like_text">Swipe to the right to like what you see.</string>
     <string name="dislike_text">Swipe to the left to dislike what you see.</string>
+    <string name="profile_swipe_done">Thank you for your contribution. You can now enjoy curated shopping in our stores.</string>
 </resources>

@@ -24,11 +24,11 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/profile_headerText"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:text="@string/swipe_products" />
+            android:layout_margin="10dp" />
 
         <com.daprlabs.cardstack.SwipeFrameLayout
             android:layout_width="match_parent"
@@ -43,49 +43,60 @@
                 app:card_spacing="10dp"
                 app:max_visible="3"
                 app:render_above="true"
-                app:rotation_degrees="15"/>
+                app:rotation_degrees="15" />
         </com.daprlabs.cardstack.SwipeFrameLayout>
 
         <View
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="1dp" />
+            android:layout_height="1dp"
+            android:layout_margin="5dp" />
 
         <LinearLayout
+            android:id="@+id/profile_bottomTextLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="center"
-            android:paddingStart="20dp">
-            <TextView
-                android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:text="@string/like_text" />
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_baseline_thumb_up_128" />
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:text="@string/like_text" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_baseline_thumb_up_128" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_baseline_thumb_down_128" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:text="@string/dislike_text" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:paddingStart="20dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_baseline_thumb_down_128" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:text="@string/dislike_text" />
-        </LinearLayout>
 
     </LinearLayout>
 
