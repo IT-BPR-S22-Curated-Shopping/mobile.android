@@ -31,31 +31,22 @@ public class BeaconService implements MonitorNotifier, IBeaconService {
     private static final int TX_POWER = -59;
     private static final int TX_LATENCY_MODE = AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY;
 
-    private final Context context;
     private final Beacon beacon;
     private final BeaconParser beaconParser;
     private final BeaconTransmitter beaconTransmitter;
     private final String selectedUUID;
-    private final int minor;
-    private final int major;
 
     @VisibleForTesting
     public BeaconService(Context context, BeaconParser beaconParser, String selectedUUID, int minor, int major, Beacon beacon, BeaconTransmitter beaconTransmitter) {
-        this.context = context;
         this.beaconParser = beaconParser;
         this.selectedUUID = selectedUUID;
-        this.minor = minor;
-        this.major = major;
         this.beacon = beacon;
         this.beaconTransmitter = beaconTransmitter;
     }
 
     public BeaconService(Application context, int minor, int major) {
-        this.context = context;
         selectedUUID = SystemUUID.getDeviceUUID(context).toString();
         beaconParser = new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"); // type of beacon
-        this.minor = minor;
-        this.major = major;
         beacon = new Beacon.Builder()
                 .setId1(selectedUUID) // UUID
                 .setId2("" + major) // Major
