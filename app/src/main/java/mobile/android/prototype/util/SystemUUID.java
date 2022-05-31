@@ -10,7 +10,7 @@ import java.util.UUID;
 public class SystemUUID {
 
     public static UUID getDeviceUUID(Context context) {
-        return UUID.fromString("010d2108-0462-4f97-" + id(context.getContentResolver())[0] + "-" + id(context.getContentResolver())[1]);
+        return UUID.fromString("010d2108-4062-4f97-" + id(context.getContentResolver())[0] + "-" + id(context.getContentResolver())[1]);
     }
 
     @SuppressLint("HardwareIds")
